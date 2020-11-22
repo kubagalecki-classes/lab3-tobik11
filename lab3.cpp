@@ -1,42 +1,37 @@
+#include "zal/include/Stocznia.hpp"
 #include <iostream>
 
-class Statek {
-public:
-	virtual unsigned int transportuj() {
+unsigned int transportujFlota(unsigned int towar)
+{
+    if (towar == 0)
+        return 0;
 
-	}
+    unsigned int transported = 0;
+    unsigned int zaglowce    = 0;
+    Stocznia     st;
 
-};
+    while (1) {
+        Statek* s = st();
+        transported += (s->transportuj());
+        std::cout << transported << std::endl;
+        // check if zaglowiec
+        Statek* ptr;
+        ptr = dynamic_cast< Zaglowiec* >(s);
+        if (ptr != nullptr)
+            zaglowce++;
+        std::cout << ptr << std::endl;
 
+        delete s;
 
-class Tankowiec : public Statek {
-public:
-	unsigned int transportuj() override{
+        if (transported >= towar)
+            break;
+    }
 
-	}
-};
-
-class Zaglowiec : public Statek {
-public:
-	unsigned int transportuj() override {
-
-	}
-};
-
-class Stocznia {
-	Statek* operator()() {
-		int p = rand() % 100;
-		if (p > 50)
-			return new Tankowiec{};
-		else
-			return new Zaglowiec{};
-	}
-};
-
-
-
+    std::cout << zaglowce << std::endl;
+    return zaglowce;
+}
 
 int main()
 {
-    puts("Hello, World!");
+    transportujFlota(650);
 }
